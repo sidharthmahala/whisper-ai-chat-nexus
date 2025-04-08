@@ -28,4 +28,15 @@ export interface ChatState {
   currentSessionId: string | null;
   settings: ChatSettings;
   isProcessing: boolean;
+  
+  // Methods
+  createSession: () => string;
+  setCurrentSession: (sessionId: string) => void;
+  renameSession: (sessionId: string, newTitle: string) => void;
+  deleteSession: (sessionId: string) => void;
+  addMessage: (message: Omit<ChatMessage, "id" | "timestamp">) => void;
+  updateSettings: (newSettings: Partial<ChatSettings>) => void;
+  setModelForCurrentSession: (modelId: string) => void;
+  setIsProcessing: (isProcessing: boolean) => void;
+  getCurrentSession: () => ChatSession | null;
 }
