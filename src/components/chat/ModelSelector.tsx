@@ -51,10 +51,19 @@ export function ModelSelector() {
   ) || aiModels[0];
 
   const handleSelectModel = (model: AIModel) => {
-    // Create a new session with selected model
-    const newSessionId = createSession();
-    // Set the model for the newly created session
-    setModelForCurrentSession(model.id);
+    // Check if current session has messages
+    const hasMessages = currentSession && currentSession.messages.length > 0;
+
+    if (hasMessages) {
+      // Create a new session with selected model only if there are messages
+      const newSessionId = createSession();
+      // Set the model for the newly created session
+      setModelForCurrentSession(model.id);
+    } else {
+      // Just update the current session's model if there are no messages
+      setModelForCurrentSession(model.id);
+    }
+    
     setOpen(false);
   };
 

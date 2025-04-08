@@ -192,9 +192,9 @@ export function ChatSidebar({
                     onClick={() => handleSelectChat(session.id)}
                   >
                     <MessageSquare className="h-4 w-4 mr-2 shrink-0" />
-                    <div className="flex flex-col items-start">
+                    <div className="flex flex-row items-center gap-2 w-full max-w-[calc(100%-2rem)]">
                       <span className="truncate">{session.title}</span>
-                      <Badge variant="outline" className="mt-1 text-xs">
+                      <Badge variant="outline" className="text-xs shrink-0">
                         {getModelNameById(session.modelId)}
                       </Badge>
                     </div>
