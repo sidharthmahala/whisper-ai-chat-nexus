@@ -22,6 +22,28 @@ const createNewSession = (): ChatSession => ({
   updatedAt: Date.now(),
 });
 
+// Helper to generate a summary based on the first few messages
+const generateChatSummary = (messages: ChatMessage[]): string => {
+  if (messages.length === 0) return "New Chat";
+  
+  // Use the first user message as the summary
+  const firstUserMessage = messages.find(msg => msg.role === "user");
+  
+  if (firstUserMessage) {
+    // Limit the summary to a reasonable length
+    const content = firstUserMessage.content;
+    const maxLength = 30;
+    
+    if (content.length <= maxLength) {
+      return content;
+    } else {
+      return `${content.substring(0, maxLength)}...`;
+    }
+  }
+  
+  return "New Chat";
+};
+
 export const useChatStore = create<ChatState>()(
   persist(
     (set, get) => ({
@@ -72,37 +94,63 @@ export const useChatStore = create<ChatState>()(
         
         if (!currentSessionId) {
           const newSessionId = get().createSession();
-          set((state) => ({
-            sessions: state.sessions.map((session) => 
-              session.id === newSessionId 
-                ? { 
-                    ...session, 
-                    messages: [...session.messages, { 
-                      id: uuidv4(), 
-                      ...message, 
-                      timestamp: Date.now() 
-                    }],
-                    updatedAt: Date.now()
-                  }
-                : session
-            ),
-          }));
+          set((state) => {
+            // Get the updated session with the new message
+            const updatedSession = { 
+              ...state.sessions.find(s => s.id === newSessionId)!,
+              messages: [{ 
+                id: uuidv4(), 
+                ...message, 
+                timestamp: Date.now() 
+              }],
+              updatedAt: Date.now()
+            };
+            
+            // Generate a summary for the title if this is the first user message
+            const newTitle = message.role === "user" 
+              ? generateChatSummary([{ id: uuidv4(), ...message, timestamp: Date.now() }])
+              : updatedSession.title;
+            
+            return {
+              sessions: state.sessions.map((session) => 
+                session.id === newSessionId 
+                  ? { 
+                      ...updatedSession,
+                      title: newTitle
+                    }
+                  : session
+              ),
+            };
+          });
         } else {
-          set((state) => ({
-            sessions: state.sessions.map((session) => 
-              session.id === currentSessionId 
-                ? { 
-                    ...session, 
-                    messages: [...session.messages, { 
-                      id: uuidv4(), 
-                      ...message, 
-                      timestamp: Date.now() 
-                    }],
-                    updatedAt: Date.now()
-                  }
-                : session
-            ),
-          }));
+          set((state) => {
+            const currentSession = state.sessions.find(s => s.id === currentSessionId);
+            if (!currentSession) return state;
+            
+            const updatedMessages = [...currentSession.messages, { 
+              id: uuidv4(), 
+              ...message, 
+              timestamp: Date.now() 
+            }];
+            
+            // Only update the title if this is the first user message in the conversation
+            const newTitle = currentSession.messages.length === 0 && message.role === "user"
+              ? generateChatSummary([{ id: uuidv4(), ...message, timestamp: Date.now() }])
+              : currentSession.title;
+            
+            return {
+              sessions: state.sessions.map((session) => 
+                session.id === currentSessionId 
+                  ? { 
+                      ...session, 
+                      messages: updatedMessages,
+                      title: newTitle,
+                      updatedAt: Date.now()
+                    }
+                  : session
+              ),
+            };
+          });
         }
       },
       
