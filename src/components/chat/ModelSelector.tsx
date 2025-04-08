@@ -43,6 +43,7 @@ const getModelIcon = (iconName: string) => {
 export function ModelSelector() {
   const [open, setOpen] = useState(false);
   const currentSession = useChatStore((state) => state.getCurrentSession());
+  const createSession = useChatStore((state) => state.createSession);
   const setModelForCurrentSession = useChatStore((state) => state.setModelForCurrentSession);
   
   const currentModel = aiModels.find(
@@ -50,6 +51,9 @@ export function ModelSelector() {
   ) || aiModels[0];
 
   const handleSelectModel = (model: AIModel) => {
+    // Create a new session with selected model
+    const newSessionId = createSession();
+    // Set the model for the newly created session
     setModelForCurrentSession(model.id);
     setOpen(false);
   };

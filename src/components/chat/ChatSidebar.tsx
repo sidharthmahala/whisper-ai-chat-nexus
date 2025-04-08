@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Badge } from "@/components/ui/badge";
+import { aiModels } from "@/data/models";
 
 interface ChatSidebarProps {
   className?: string;
@@ -74,6 +76,11 @@ export function ChatSidebar({
     } else if (e.key === "Escape") {
       cancelRename();
     }
+  };
+
+  const getModelNameById = (modelId: string) => {
+    const model = aiModels.find(model => model.id === modelId);
+    return model ? model.name : "Unknown";
   };
 
   if (isCollapsed) {
@@ -185,7 +192,12 @@ export function ChatSidebar({
                     onClick={() => handleSelectChat(session.id)}
                   >
                     <MessageSquare className="h-4 w-4 mr-2 shrink-0" />
-                    <span className="truncate">{session.title}</span>
+                    <div className="flex flex-col items-start">
+                      <span className="truncate">{session.title}</span>
+                      <Badge variant="outline" className="mt-1 text-xs">
+                        {getModelNameById(session.modelId)}
+                      </Badge>
+                    </div>
                   </Button>
                   <div className="flex opacity-0 group-hover:opacity-100 transition-opacity">
                     <Button

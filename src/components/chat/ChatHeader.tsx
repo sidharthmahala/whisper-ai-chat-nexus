@@ -1,34 +1,48 @@
 
-import { ModelSelector } from "./ModelSelector";
-import { ThemeToggle } from "../ThemeToggle";
-import { Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { ModelSelector } from "./ModelSelector";
+import { Settings, User } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { useNavigate } from "react-router-dom";
 
 interface ChatHeaderProps {
-  onSettingsClick: () => void;
-  className?: string;
+  onSettingsClick?: () => void;
 }
 
-export function ChatHeader({ onSettingsClick, className }: ChatHeaderProps) {
+export function ChatHeader({ onSettingsClick }: ChatHeaderProps) {
+  const navigate = useNavigate();
+  
+  const handleSettingsClick = () => {
+    // Navigate to profile settings page
+    navigate("/profile");
+  };
+  
   return (
-    <header className={cn("border-b bg-background p-3", className)}>
-      <div className="flex items-center justify-between gap-3">
-        <div className="w-60 hidden md:block">
+    <header className="border-b px-4 py-2 flex items-center justify-between">
+      <div className="flex items-center gap-4">
+        <h1 className="text-xl font-bold hidden md:block">AI Chat Nexus</h1>
+        <div className="w-40 md:w-60">
           <ModelSelector />
         </div>
-        <div className="flex-1 text-center sm:flex-0">
-          <h1 className="text-xl font-semibold hidden md:block">AI Chat Nexus</h1>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="block md:hidden">
-            <ModelSelector />
-          </div>
-          <Button variant="outline" size="icon" onClick={onSettingsClick}>
-            <Settings className="h-5 w-5" />
-          </Button>
-          <ThemeToggle />
-        </div>
+      </div>
+      <div className="flex items-center gap-2">
+        <ThemeToggle />
+        <Button 
+          variant="ghost" 
+          size="icon"
+          onClick={handleSettingsClick}
+          title="Profile Settings"
+        >
+          <User className="h-5 w-5" />
+        </Button>
+        <Button 
+          variant="ghost" 
+          size="icon"
+          onClick={onSettingsClick}
+          title="Chat Settings"
+        >
+          <Settings className="h-5 w-5" />
+        </Button>
       </div>
     </header>
   );

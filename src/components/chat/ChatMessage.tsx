@@ -6,7 +6,6 @@ import { User, Bot } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { CodeProps } from "react-markdown/lib/ast-to-react";
 
 interface ChatMessageProps {
   message: ChatMessageType;
@@ -39,7 +38,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
         <div className="markdown-content">
           <ReactMarkdown
             components={{
-              code({ node, inline, className, children, ...props }: CodeProps) {
+              code({ node, inline, className, children, ...props }: any) {
                 const match = /language-(\w+)/.exec(className || "");
                 return !inline && match ? (
                   <SyntaxHighlighter
