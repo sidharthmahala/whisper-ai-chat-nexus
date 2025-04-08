@@ -1,13 +1,45 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { useState, useEffect } from "react";
+import { ChatSidebar } from "@/components/chat/ChatSidebar";
+import { ChatInterface } from "@/components/chat/ChatInterface";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import { useChatStore } from "@/store/chatStore";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Index = () => {
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const isMobile = useIsMobile();
+  const createSession = useChatStore(state => state.createSession);
+  const currentSessionId = useChatStore(state => state.currentSessionId);
+  
+  useEffect(() => {
+    // Initialize with sidebar collapsed on mobile
+    if (isMobile) {
+      setSidebarCollapsed(true);
+    }
+  }, [isMobile]);
+  
+  useEffect(() => {
+    // Create a session if none exists
+    if (!currentSessionId) {
+      createSession();
+    }
+  }, [currentSessionId, createSession]);
+  
+  const toggleSidebar = () => {
+    setSidebarCollapsed(!sidebarCollapsed);
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <ThemeProvider defaultTheme="system">
+      <div className="flex h-screen w-full overflow-hidden bg-background text-foreground">
+        <ChatSidebar 
+          isCollapsed={sidebarCollapsed} 
+          onToggle={toggleSidebar}
+        />
+        <ChatInterface className="flex-1" />
       </div>
-    </div>
+    </ThemeProvider>
   );
 };
 
