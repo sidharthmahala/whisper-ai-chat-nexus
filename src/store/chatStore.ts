@@ -1,4 +1,3 @@
-
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { v4 as uuidv4 } from "uuid";
@@ -53,6 +52,15 @@ export const useChatStore = create<ChatState>()(
       isProcessing: false,
       
       createSession: () => {
+        // Check if current session exists and has no messages
+        const currentSession = get().getCurrentSession();
+        
+        // If there's a current session with no messages, just return that session's ID instead of creating a new one
+        if (currentSession && currentSession.messages.length === 0) {
+          return currentSession.id;
+        }
+        
+        // Otherwise, create a new session as before
         const newSession = createNewSession();
         set((state) => ({
           sessions: [newSession, ...state.sessions],
