@@ -12,9 +12,15 @@ import { ChatSettings } from "./ChatSettings";
 
 interface ChatInterfaceProps {
   className?: string;
+  onToggleSidebar?: () => void;
+  isSidebarCollapsed?: boolean;
 }
 
-export function ChatInterface({ className }: ChatInterfaceProps) {
+export function ChatInterface({ 
+  className,
+  onToggleSidebar,
+  isSidebarCollapsed = false
+}: ChatInterfaceProps) {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
@@ -71,7 +77,11 @@ export function ChatInterface({ className }: ChatInterfaceProps) {
 
   return (
     <div className={cn("flex flex-col h-full", className)}>
-      <ChatHeader onSettingsClick={() => setSettingsOpen(true)} />
+      <ChatHeader 
+        onSettingsClick={() => setSettingsOpen(true)} 
+        onToggleSidebar={onToggleSidebar}
+        isSidebarCollapsed={isSidebarCollapsed}
+      />
       
       <ScrollArea 
         ref={scrollAreaRef} 

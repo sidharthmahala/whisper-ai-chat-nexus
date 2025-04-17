@@ -10,9 +10,7 @@ import {
   Trash2, 
   Edit3, 
   Check, 
-  X, 
-  ChevronLeft, 
-  ChevronRight
+  X
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -27,7 +25,6 @@ interface ChatSidebarProps {
 
 export function ChatSidebar({
   className,
-  isCollapsed,
   onToggle,
 }: ChatSidebarProps) {
   const [renamingId, setRenamingId] = useState<string | null>(null);
@@ -83,43 +80,6 @@ export function ChatSidebar({
     return model ? model.name : "Unknown";
   };
 
-  if (isCollapsed) {
-    return (
-      <div className="flex flex-col items-center py-4 h-screen bg-sidebar border-r">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={onToggle}
-          className="mb-2"
-        >
-          <ChevronRight className="h-4 w-4" />
-        </Button>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={handleNewChat}
-          className="mb-2"
-        >
-          <PlusCircle className="h-4 w-4" />
-        </Button>
-        <ScrollArea className="flex-1 w-full">
-          <div className="px-1 py-2">
-            {sessions.map((session) => (
-              <Button
-                key={session.id}
-                variant={session.id === currentSessionId ? "default" : "ghost"}
-                className="w-full justify-start my-1 p-2"
-                onClick={() => handleSelectChat(session.id)}
-              >
-                <MessageSquare className="h-4 w-4" />
-              </Button>
-            ))}
-          </div>
-        </ScrollArea>
-      </div>
-    );
-  }
-
   return (
     <div
       className={cn(
@@ -129,13 +89,6 @@ export function ChatSidebar({
     >
       <div className="flex items-center justify-between p-4">
         <h2 className="text-lg font-semibold">Chat History</h2>
-        <Button 
-          variant="outline"
-          size="icon"
-          onClick={onToggle}
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </Button>
       </div>
       <Button
         className="mx-4 mb-4"

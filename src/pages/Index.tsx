@@ -33,11 +33,17 @@ const Index = () => {
   return (
     <ThemeProvider defaultTheme="system">
       <div className="flex h-screen w-full overflow-hidden bg-background text-foreground">
-        <ChatSidebar 
-          isCollapsed={sidebarCollapsed} 
-          onToggle={toggleSidebar}
+        {!sidebarCollapsed && (
+          <ChatSidebar 
+            isCollapsed={false} 
+            onToggle={toggleSidebar}
+          />
+        )}
+        <ChatInterface 
+          className="flex-1" 
+          onToggleSidebar={toggleSidebar} 
+          isSidebarCollapsed={sidebarCollapsed}
         />
-        <ChatInterface className="flex-1" />
       </div>
     </ThemeProvider>
   );
