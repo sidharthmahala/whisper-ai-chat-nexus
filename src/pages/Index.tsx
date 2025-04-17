@@ -35,7 +35,7 @@ const Index = () => {
     <ThemeProvider defaultTheme="system">
       <div className="flex h-screen w-full overflow-hidden bg-background text-foreground relative">
         {/* Fixed toggle button in top-left corner */}
-        <div className="fixed top-4 left-4 z-50">
+        <div className="fixed top-[11px] left-4 z-50">
           <NavbarToggle 
             isCollapsed={sidebarCollapsed} 
             onToggle={toggleSidebar}
@@ -52,7 +52,7 @@ const Index = () => {
           {/* Content area with sidebar and chat */}
           <div className="flex flex-1 overflow-hidden relative">
             {/* Floating sidebar with higher z-index */}
-            <div className={`fixed top-[53px] left-0 z-40 h-[calc(100%-53px)] transition-transform duration-300 ${
+            <div className={`fixed top-[53px] left-0 z-40 h-[calc(100vh-53px)] transition-transform duration-300 ${
               sidebarCollapsed ? '-translate-x-full' : 'translate-x-0'
             }`}>
               <ChatSidebar 

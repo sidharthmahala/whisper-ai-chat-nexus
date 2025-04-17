@@ -10,11 +10,11 @@ interface NavbarToggleProps {
 export function NavbarToggle({ isCollapsed, onToggle }: NavbarToggleProps) {
   return (
     <Button
-      variant="secondary"
+      variant="ghost"
       size="icon"
       onClick={onToggle}
       title={isCollapsed ? "Show sidebar" : "Hide sidebar"}
-      className="h-10 w-10 rounded-full shadow-md hover:shadow-lg transition-all"
+      className="h-10 w-10 rounded-full"
     >
       {isCollapsed ? (
         <PanelRightOpen className="h-5 w-5" />
