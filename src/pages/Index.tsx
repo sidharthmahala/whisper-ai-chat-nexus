@@ -42,19 +42,30 @@ const Index = () => {
           />
         </div>
         
-        {/* Floating sidebar with higher z-index */}
-        <div className={`fixed top-0 left-0 z-40 h-full transition-transform duration-300 ${
-          sidebarCollapsed ? '-translate-x-full' : 'translate-x-0'
-        }`}>
-          <ChatSidebar 
-            isCollapsed={false} 
-            onToggle={toggleSidebar}
-          />
-        </div>
-        
-        {/* Main content area */}
-        <div className="flex-1 w-full">
-          <ChatInterface className="h-full" />
+        {/* Main layout */}
+        <div className="flex flex-col w-full h-screen">
+          {/* Header area remains fixed at top */}
+          <div className="h-[53px] w-full flex-shrink-0">
+            {/* This space is reserved for the header */}
+          </div>
+          
+          {/* Content area with sidebar and chat */}
+          <div className="flex flex-1 overflow-hidden relative">
+            {/* Floating sidebar with higher z-index */}
+            <div className={`fixed top-[53px] left-0 z-40 h-[calc(100%-53px)] transition-transform duration-300 ${
+              sidebarCollapsed ? '-translate-x-full' : 'translate-x-0'
+            }`}>
+              <ChatSidebar 
+                isCollapsed={false} 
+                onToggle={toggleSidebar}
+              />
+            </div>
+            
+            {/* Main content area */}
+            <div className="flex-1 w-full">
+              <ChatInterface className="h-full" />
+            </div>
+          </div>
         </div>
       </div>
     </ThemeProvider>
